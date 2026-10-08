@@ -3,7 +3,7 @@
 <!-- TODO: media/banner.png (wide image of the robot, ~1600x500) -->
 <img src="media/banner.png" alt="DOALL warehouse robot" width="100%"/>
 
-# 🤖 DOALL — Autonomous Warehouse Robot
+#  DOALL — Autonomous Warehouse Robot
 
 **A mobile manipulator for warehouse logistics: SLAM, autonomous navigation, package handling, and a real-time digital twin.**
 Built with ROS 2, simulated in Gazebo, deployed on a Raspberry Pi 5.
@@ -19,7 +19,7 @@ Built with ROS 2, simulated in Gazebo, deployed on a Raspberry Pi 5.
 
 ---
 
-## 📖 Overview
+##  Overview
 
 **DOALL** is a warehouse robot developed as part of the **Intigo** project. It combines a differential-drive mobile base with a gripper and a pan-tilt camera head so it can **map** an environment, **localize** itself, **navigate** autonomously, and **pick and move packages**.
 
@@ -35,7 +35,7 @@ A **digital twin** keeps the real robot and its simulated counterpart synchroniz
 
 ---
 
-## 🎬 Demos
+##  Demos
 
 > Click a preview to open the full video.
 
@@ -53,20 +53,20 @@ A **digital twin** keeps the real robot and its simulated counterpart synchroniz
 
 ---
 
-## ✨ Features
+##  Features
 
-- 🗺️ **SLAM mapping** with `slam_toolbox`
-- 📍 **Localization** with AMCL on a saved map, fused with wheel odometry via an **EKF**
-- 🧭 **Autonomous navigation** and path planning with **Nav2**
-- 🦾 **Package manipulation** with a gripper and a pan-tilt camera head
-- 🪞 **Digital twin**: real-time synchronization between the physical robot and Gazebo
-- 🔌 **Arduino low-level control** (motors, joints) bridged to ROS 2
-- 🧪 **Full simulation workflow**: Gazebo worlds of a warehouse and a garage
-- 📦 Modular robot description in **Xacro** (base, wheels, lidar, camera, gripper, pan-tilt)
+-  **SLAM mapping** with `slam_toolbox`
+-  **Localization** with AMCL on a saved map, fused with wheel odometry via an **EKF**
+-  **Autonomous navigation** and path planning with **Nav2**
+-  **Package manipulation** with a gripper and a pan-tilt camera head
+-  **Digital twin**: real-time synchronization between the physical robot and Gazebo
+-  **Arduino low-level control** (motors, joints) bridged to ROS 2
+-  **Full simulation workflow**: Gazebo worlds of a warehouse and a garage
+-  Modular robot description in **Xacro** (base, wheels, lidar, camera, gripper, pan-tilt)
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 <!-- TODO (optional): replace with media/architecture.png exported from draw.io -->
 ```mermaid
@@ -105,7 +105,7 @@ flowchart LR
 
 ---
 
-## 🔩 Hardware
+##  Hardware
 
 <!-- TODO: media/robot_front.jpg, media/robot_side.jpg, media/robot_top.jpg -->
 <p align="center">
@@ -127,7 +127,7 @@ flowchart LR
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```
 doall/
@@ -153,7 +153,7 @@ doall/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -183,9 +183,9 @@ source install/setup.bash
 
 ---
 
-## ▶️ Usage
+##  Usage
 
-### 🖥️ Simulation
+###  Simulation
 
 ```bash
 # Spawn the robot in the Gazebo warehouse/garage world
@@ -207,7 +207,7 @@ Save a map once you are happy with it:
 ros2 run nav2_map_server map_saver_cli -f maps/my_room_map
 ```
 
-### 🤖 Real robot (Raspberry Pi 5)
+###  Real robot (Raspberry Pi 5)
 
 ```bash
 # Robot description / TF
@@ -220,7 +220,7 @@ ros2 launch doall rob_mapping.launch.py
 ros2 launch doall rob_navigation.launch.py
 ```
 
-### 🔧 Flash the Arduino
+###  Flash the Arduino
 
 ```bash
 cd arduino
@@ -229,7 +229,7 @@ cd arduino
 
 ---
 
-## 🪞 Digital Twin
+##  Digital Twin
 
 The real robot publishes its state (pose, joint positions) and the Gazebo model mirrors it in real time, allowing remote monitoring, safe testing of new behaviors, and debugging against the real robot's behavior.
 
@@ -238,7 +238,7 @@ The real robot publishes its state (pose, joint positions) and the Gazebo model 
 
 ---
 
-## 🗺️ Visualization
+##  Visualization
 
 <!-- TODO: RViz / Gazebo screenshots -->
 <p align="center">
@@ -248,7 +248,7 @@ The real robot publishes its state (pose, joint positions) and the Gazebo model 
 
 ---
 
-## 🛣️ Roadmap
+##  Roadmap
 
 - [x] URDF/Xacro model and Gazebo simulation
 - [x] SLAM mapping and AMCL localization
@@ -264,7 +264,7 @@ The real robot publishes its state (pose, joint positions) and the Gazebo model 
 
 ---
 
-## 👤 Author
+##  Author
 
 **Ghaith Mhamdi** — Engineering student, École Polytechnique de Tunisie
 Robotics · Embedded Systems · FPGA · Autonomous Systems
