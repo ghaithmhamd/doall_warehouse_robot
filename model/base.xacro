@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!--robot_body-->
+  <link name="base_link">
+      <visual>
+          <geometry>
+              <box size="${a} ${c} ${b}"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <material name="plywood_colour"/>
+      </visual>
+      <collision>
+          <geometry>
+              <box size="${a} ${c} ${b}"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision>
+      <xacro:inertia_body/>
+  </link>
+
+<link name="caster_link">
+      <visual>
+          <geometry>
+              <cylinder radius="${2*rc}" length="${zc-rc}"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <material name="dark_gray"/>
+      </visual>
+
+      <visual>
+          <geometry>
+              <sphere radius="${rc}"/>
+          </geometry>
+          <origin xyz="0 0 ${(-zc+rc)/2}" rpy="0 0 0"/>
+          <material name="white"/>
+      </visual>
+      
+      <collision>
+          <geometry>
+              <cylinder radius="${2*rc}" length="${zc-rc}"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision>
+      
+      <collision>
+          <geometry>
+              <sphere radius="${rc}"/>
+          </geometry>
+          <origin xyz="0 0 ${(-zc+rc)/2}" rpy="0 0 0"/>
+      </collision>
+      
+      <xacro:inertia_caster/>
+  </link>
+  <joint name="caster_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="caster_link"/>
+      <origin xyz="${xc} 0 ${(-zc+rc)/2}" rpy="0 0 0"/>
+  </joint>
+ 
+  <link name="support_lidar">
+      <visual>
+          <geometry>
+              <cylinder radius="0.002" length="0.038"/>
+          </geometry>
+          <origin xyz="0.021 0.021 0" rpy="0 0 0"/>
+          <material name="copper_colour"/>
+      </visual>
+      <collision>
+          <geometry>
+              <cylinder radius="0.002" length="0.038"/>
+          </geometry>
+          <origin xyz="0.021 0.021 0" rpy="0 0 0"/>
+      </collision>
+      <visual>
+          <geometry>
+              <cylinder radius="0.002" length="0.038"/>
+          </geometry>
+          <origin xyz="-0.021 0.021 0" rpy="0 0 0"/>
+          <material name="copper_colour"/>
+      </visual>
+      <collision>
+          <geometry>
+              <cylinder radius="0.002" length="0.038"/>
+          </geometry>
+          <origin xyz="-0.021 0.021 0" rpy="0 0 0"/>
+      </collision>
+      <visual>
+          <geometry>
+              <cylinder radius="0.002" length="0.038"/>
+          </geometry>
+          <origin xyz="0.021 -0.021 0" rpy="0 0 0"/>
+          <material name="copper_colour"/>
+      </visual>
+      <collision>
+          <geometry>
+              <cylinder radius="0.002" length="0.038"/>
+          </geometry>
+          <origin xyz="0.021 -0.021 0" rpy="0 0 0"/>
+      </collision>
+      <visual>
+          <geometry>
+              <cylinder radius="0.002" length="0.038"/>
+          </geometry>
+          <origin xyz="-0.021 -0.021 0" rpy="0 0 0"/>
+          <material name="copper_colour"/>
+      </visual>
+      <collision>
+          <geometry>
+              <cylinder radius="0.002" length="0.038"/>
+          </geometry>
+          <origin xyz="-0.021 -0.021 0" rpy="0 0 0"/>
+      </collision>
+  </link>
+  <joint name="support_lidar_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="support_lidar"/>
+      <origin xyz="0.002 0 ${b/2+0.019}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="battery_link">
+      <visual>
+          <geometry>
+              <box size="0.042 0.135 0.018"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <material name="gray"/>
+      </visual>
+      <collision>
+          <geometry>
+              <box size="0.042 0.135 0.018"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision>
+      <inertial>
+          <mass value="0.255"/>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <inertia ixx="3.94e-04" iyy="4.44e-05" izz="4.25e-04" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+  </link>
+  <joint name="battery_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="battery_link"/>
+      <origin xyz="${a/2-0.021} 0 ${b/2+0.009}" rpy="0 0 0"/>
+  </joint>
+
+</robot>

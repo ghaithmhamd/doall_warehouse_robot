@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <link name="wheel1_link">
+      <visual>
+          <geometry>
+              <cylinder radius="${r}" length="${d}"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="${pi_constant/2} 0 0"/>
+          <material name="black"/>
+      </visual>
+      <collision>
+          <geometry>
+              <cylinder radius="${r}" length="${d}"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="${pi_constant/2} 0 0"/>
+      </collision>
+      <xacro:inertia_wheel/>
+  </link>
+
+  <link name="wheel2_link">
+      <visual>
+          <geometry>
+              <cylinder radius="${r}" length="${d}"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="${pi_constant/2} 0 0"/>
+          <material name="black"/>
+      </visual>
+      <collision>
+          <geometry>
+              <cylinder radius="${r}" length="${d}"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="${pi_constant/2} 0 0"/>
+      </collision>
+      <xacro:inertia_wheel/>
+  </link>
+
+<!--decor-->
+<link name="wheel1_decor">
+      <visual>
+          <geometry>
+              <cylinder radius="${r-0.007}" length="0.0001"/>
+          </geometry>
+          <origin xyz="0 ${-d/2} 0" rpy="${pi_constant/2} 0 0"/>
+          <material name="blue"/>
+      </visual>
+  </link>
+  <joint name="wheel1_decor_joint" type="fixed">
+      <parent link="wheel1_link"/>
+      <child link="wheel1_decor"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="wheel2_decor">
+      <visual>
+          <geometry>
+              <cylinder radius="${r-0.007}" length="0.0001"/>
+          </geometry>
+          <origin xyz="0 ${d/2} 0" rpy="${pi_constant/2} 0 0"/>
+          <material name="blue"/>
+      </visual>
+  </link>
+  <joint name="wheel2_decor_joint" type="fixed">
+      <parent link="wheel2_link"/>
+      <child link="wheel2_decor"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>

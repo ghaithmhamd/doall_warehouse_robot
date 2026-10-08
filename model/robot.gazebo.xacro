@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<robot>
+<!--
+Parameter	                 Description	                                     Typical Range
+mu1	 Static friction coefficient - Force needed to start moving from rest	0.8-1.2 (higher = more grip)
+mu2  Dynamic friction coefficient - Force needed to keep moving	            0.4-0.8 (usually lower than mu1)
+kp   Contact stiffness - How "hard" or "bouncy" the material is	            1e4-1e7 N/m (higher = more rigid)
+kd   Contact damping - How much energy is lost during contact	            1e3-1e5 N·s/m (higher = less bouncy)
+
+Think of it this way: mu1 is how sticky your tires are, 
+mu2 is how slippery they are while moving, kp is like the firmness of a basketball, 
+and kd is how quickly it stops bouncing.
+If simulation is unstable: Decrease kp or increase kd
+-->
+<gazebo reference="wheel1_link">
+    <mu1>1.0</mu1>       <!-- Good static grip to prevent slipping -->
+    <mu2>0.7</mu2>       <!-- Slightly lower when rolling -->
+    <kp>1000000</kp>     <!-- Very stiff - wheels shouldn't compress much -->
+    <kd>1000</kd>        <!-- Minimal bouncing -->
+</gazebo>
+<gazebo reference="wheel2_link">
+    <mu1>1.0</mu1>       
+    <mu2>0.7</mu2>      
+    <kp>1000000</kp>     
+    <kd>1000</kd>        
+</gazebo>
+
+<gazebo reference="left_finger">
+    <mu1>1.5</mu1>       <!-- Very high friction for secure gripping -->
+    <mu2>1.0</mu2>       <!-- Still high when objects are sliding -->
+    <kp>500000</kp>      <!-- Some compliance to conform to objects -->
+    <kd>5000</kd>        <!-- Damping to prevent vibrations -->
+</gazebo>
+<gazebo reference="right_finger">
+    <mu1>1.5</mu1>      
+    <mu2>1.0</mu2>     
+    <kp>500000</kp>     
+    <kd>5000</kd>       
+</gazebo>
+
+<gazebo reference="caster_link">
+  <mu1>0.05</mu1>  
+  <mu2>0.05</mu2>
+</gazebo>
+
+<!--diff-drive-->
+<gazebo>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+        <!--Wheels-->
+        <right_joint>wheel1_joint</right_joint>
+        <left_joint>wheel2_joint</left_joint>
+        <!--kinematics-->
+        <wheel_separation>${2*yw}</wheel_separation>
+        <wheel_diameter>${2*r}</wheel_diameter>
+        <!--Limits-->
+        <max_linear_acceleration>1</max_linear_acceleration>
+        <!--Topic, Frames and Odometry-->
+        <topic>cmd_vel</topic>
+        <tf_topic>/tf</tf_topic>
+        <odom_topic>odom</odom_topic>
+        <frame_id>odom</frame_id>
+        <child_frame_id>base_footprint</child_frame_id>
+        <odom_publisher_frequency>30</odom_publisher_frequency>
+    </plugin>
+</gazebo>
+
+<!--joint-state-publisher-->
+<gazebo>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+        <topic>joint_states</topic>
+        <joint_name>wheel1_joint</joint_name>
+        <joint_name>wheel2_joint</joint_name>
+        <joint_name>gripper_left_upper_joint</joint_name> <!-- 0 1.57 -->
+        <joint_name>gripper_roll_joint</joint_name> <!-- -1.57 1.57 -->
+        <joint_name>gripper_pitch_joint</joint_name> <!-- -1.57 1.57 -->
+    </plugin>
+</gazebo>
+
+<!-- gripper -->
+<!--
+<gazebo>
+    <plugin filename="libgz-sim-joint-position-controller-system.so" name="gz::sim::systems::JointPositionController">
+        <joint_name>gripper_left_upper_joint</joint_name>
+        <topic>gripper_left_upper_joint_cmd</topic>  
+        <initial_position>0.0</initial_position>
+        <p_gain>9000</p_gain>
+        <i_gain>300</i_gain>
+        <d_gain>120</d_gain>
+    </plugin>
+</gazebo>-->
+
+<!-- gripper_roll_joint -->
+<!--
+<gazebo>
+    <plugin filename="libgz-sim-joint-position-controller-system.so" name="gz::sim::systems::JointPositionController">
+        <joint_name>gripper_roll_joint</joint_name>
+        <topic>gripper_roll_joint_cmd</topic>  
+        <initial_position>0.0</initial_position>
+        <p_gain>3000</p_gain>
+        <i_gain>100</i_gain>
+        <d_gain>40</d_gain>
+    </plugin>
+</gazebo>-->
+
+<!-- pantilt_joint2 -->
+<!--
+<gazebo>
+    <plugin filename="libgz-sim-joint-position-controller-system.so" name="gz::sim::systems::JointPositionController">
+        <joint_name>gripper_pitch_joint</joint_name>
+        <topic>gripper_pitch_joint_cmd</topic>  
+        <initial_position>0.0</initial_position>
+        <p_gain>3000</p_gain>
+        <i_gain>100</i_gain>
+        <d_gain>40</d_gain>
+    </plugin>
+</gazebo>-->
+
+
+
+<!--sensors-->
+<gazebo>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+    </plugin>
+</gazebo>
+
+<!--lidar-->
+<gazebo reference='lidar_link'>
+    <sensor name='gpu_lidar' type='gpu_lidar'>
+        <gz_frame_id>lidar_link</gz_frame_id>
+        <frame_id>lidar_link</frame_id>
+        <pose>0 0 0.02 0 0 0</pose>
+        <topic>/scan</topic>
+        <update_rate>10.0</update_rate>  <!--10 was 1-->
+        <lidar>
+            <scan>
+                <horizontal>
+                    <samples>640</samples>
+                    <resolution>1</resolution>
+                    <min_angle>-3.1416</min_angle>
+                    <max_angle>3.1416</max_angle>
+                </horizontal>
+                <vertical>
+                    <samples>1</samples>
+                    <resolution>0.01</resolution>
+                    <min_angle>0</min_angle>
+                    <max_angle>0</max_angle>
+                </vertical>
+            </scan>
+            <range>
+                <min>0.01</min>
+                <max>50.0</max>
+                <resolution>0.005</resolution>
+            </range>
+            <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.001</stddev>
+            </noise>
+        </lidar>
+        <always_on>1</always_on>
+        <visualise>1</visualise>
+    </sensor>
+</gazebo> 
+
+<!--camera-->
+<gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <camera>
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>15</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+        <optical_frame_id>camera_link_optical</optical_frame_id>
+        <camera_info_topic>camera/camera_info</camera_info_topic>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>20</update_rate>
+      <visualize>true</visualize>
+      <topic>camera/image_raw</topic>
+    </sensor>
+</gazebo>
+
+</robot>

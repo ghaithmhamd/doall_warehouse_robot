@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<robot name="doall_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+ <!--
+ros2 launch urdf_tutorial display.launch.py model:=/home/ghaith-mhamdi/warehouse_ws/src/doall/model/robot.xacro rvizconfig:=/home/ghaith-mhamdi/warehouse_ws/src/doall/rviz/robot_description.rviz
+--> 
+<!--to view launch simulation from RVIZ :
+rviz2 -d  /home/ghaith-mhamdi/warehouse_ws/src/doall/rviz/view_all.rviz
+-->
+
+<material name="red">
+    <color rgba="1 0 0 1"/>
+</material>
+
+<material name="yellow">
+    <color rgba="1 1 0 1"/>
+</material>
+
+<material name="blue">
+    <color rgba="0 0 1 1"/>
+</material>
+
+<material name="green">
+    <color rgba="0 1 0 1"/>
+</material>
+
+<material name="white">
+    <color rgba="1 1 1 1"/>
+</material>
+
+<material name="black">
+    <color rgba="0.1 0.1 0.1 1"/>
+</material>
+
+<material name="metallic_blue">
+  <color rgba="0.2 0.4 0.8 1"/>  
+</material>
+
+<material name="orange">
+    <color rgba="1.0 0.5 0.0 1.0"/>
+    <ambient>1.0 0.5 0.0 1.0</ambient>
+    <diffuse>1.0 0.5 0.0 1.0</diffuse>
+    <specular>0.1 0.1 0.1 1.0</specular>
+</material>
+
+<material name="gray">
+  <color rgba="0.5 0.5 0.5 1.0"/>
+</material>
+
+<material name="dark_gray">
+  <color rgba="0.3 0.3 0.3 1.0"/>
+</material>
+
+<material name="plywood_colour">
+  <color rgba="0.70 0.60 0.45 1.0"/>
+</material>
+
+<material name="copper_colour">
+  <color rgba="0.60 0.38 0.20 1.0"/>
+</material>
+
+
+<xacro:property name="pi_constant" value="3.141592"/>
+<!--Body_Dimensions-->
+<xacro:property name="a" value="0.16"/>
+<xacro:property name="b" value="0.005"/> <!--0.0035-->
+<xacro:property name="c" value="0.210"/>
+<!--WheelRight-->
+<xacro:property name="r" value="0.0325"/> 
+<xacro:property name="d" value="0.025"/>
+<xacro:property name="zw" value="0.0225"/>
+<xacro:property name="xw" value="0.043"/>
+<xacro:property name="yw" value="0.125"/>
+<!--caster-->
+<xacro:property name="rc" value="0.0075"/> 
+<xacro:property name="zc" value="${zw+r}"/>
+<xacro:property name="xc" value="-0.062"/>
+<!--Lidar-->
+<xacro:property name="xl" value="0.002"/>
+<xacro:property name="al" value="0.053"/>
+<xacro:property name="rl" value="0.025"/>
+<xacro:property name="drl" value="0.018"/>
+<xacro:property name="dal" value="0.022"/>
+
+<!--Materials_density(contre_plaqué,plastic)-->
+<xacro:property name="d1" value="700.0"/>
+<xacro:property name="d2" value="1400.0"/>
+
+<!--Body_Mass-->
+<xacro:property name="m1" value="${d1*a*b*c}"/>
+<!--wheels_mass-->
+<xacro:property name="m2" value="${d2*pi_constant*r*r*d}"/>
+<!--CasterWheels_Mass-->
+<xacro:property name="m3" value="${2*m2}"/>
+
+<!--Body_MomentsOfInertia-->
+<xacro:property name="Ix_body" value="${(1.0/12.0)*m1*(b*b+c*c)}"/>
+<xacro:property name="Iy_body" value="${(1.0/12.0)*m1*(a*a+b*b)}"/>
+<xacro:property name="Iz_body" value="${(1.0/12.0)*m1*(a*a+c*c)}"/>
+
+<!--Wheels_MomentsOfInertia-->
+<xacro:property name="Iz_wheel" value="${0.5*m2*r*r}"/>
+<xacro:property name="I_wheel" value="${(1.0/12.0)*m2*(3*r*r+d*d)}"/>
+
+<!--CasterSphere_MomentsOfInertia-->
+<xacro:property name="Iz_caster" value="${0.5*m3*2*rc*2*rc}"/>
+<xacro:property name="I_caster" value="${(1.0/12.0)*m3*(3*2*rc*2*rc+0.035*0.035)}"/>
+
+<!--inertia-->
+<xacro:macro name="inertia_body">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${m1}"/>
+        <inertia ixx="${Ix_body}" ixy="0.0" ixz="0.0" iyy="${Iy_body}" iyz="0.0" izz="${Iz_body}"/>
+    </inertial>
+</xacro:macro>
+
+<xacro:macro name="inertia_wheel">
+    <inertial>
+        <origin xyz="0 0 0" rpy="${pi_constant/2.0} 0 0"/>
+        <mass value="${m2}"/>
+        <inertia ixx="${I_wheel}" ixy="0.0" ixz="0.0" iyy="${I_wheel}" iyz="0.0" izz="${Iz_wheel}"/>
+    </inertial>
+</xacro:macro>
+
+<xacro:macro name="inertia_caster">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${m3}"/>
+        <inertia ixx="${I_caster}" ixy="0.0" ixz="0.0" iyy="${I_caster}" iyz="0.0" izz="${I_caster}"/>
+    </inertial>
+</xacro:macro>
+
+<!-- Include base -->
+<xacro:include filename="$(find doall)/model/base.xacro"/>
+<!-- Include pan_tilt -->
+<xacro:include filename="$(find doall)/model/pan_tilt.xacro"/>
+<!-- Include gripper -->
+<xacro:include filename="$(find doall)/model/gripper.xacro"/>
+<!-- Include wheels -->
+<xacro:include filename="$(find doall)/model/wheels.xacro"/>
+<!-- Include lidar -->
+<xacro:include filename="$(find doall)/model/lidar.xacro"/>
+<!-- Include camera -->
+<xacro:include filename="$(find doall)/model/camera.xacro"/>
+<!--include the file that defines extra Gazebo options and motion control drivers-->
+<xacro:include filename="$(find doall)/model/robot.gazebo.xacro" />
+
+<!--joints-->
+<link name="base_footprint"></link>
+<joint name="base_link_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+</joint>
+
+<joint name="wheel1_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel1_link"/>
+    <origin xyz="${xw} ${-yw} ${-zw}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="50000" velocity="10"/>
+    <dynamics damping="0.00001" friction="0.00001"/>
+</joint>
+
+<joint name="wheel2_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel2_link"/>
+    <origin xyz="${xw} ${yw} ${-zw}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="50000" velocity="10"/>
+    <dynamics damping="0.00001" friction="0.00001"/> 
+</joint>
+
+<joint name="pan_tilt_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_pan_tilt"/>
+    <origin xyz="${a/2+0.0015} 0 0.0085" rpy="0 -1.57 3.14"/>
+</joint>
+
+<joint name="gripper_joint" type="fixed">
+    <parent link="part_3_link"/>
+    <child link="gripper_base"/>
+    <origin xyz="-0.008 0 0.041" rpy="0 -1.57 0"/>
+</joint>
+
+<joint name="camera_joint" type="fixed">
+  <parent link="part_3_link"/>  
+  <child  link="camera_link"/>
+  <origin xyz="0.026 0 0.013" rpy="3.14 -1.57 0"/>
+</joint>
+
+<link name="camera_link_optical"/>
+<joint type="fixed" name="camera_optical_joint">
+  <origin xyz="0.024 0 0" rpy="0 0 0"/>
+  <child link="camera_link_optical"/>
+  <parent link="camera_link"/>
+</joint>
+
+</robot>

@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="camera_link">
+      <visual>
+          <geometry>
+              <box size="0.001 0.024 0.024"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <material name="dark_gray"/>
+      </visual>
+      <collision>
+          <geometry>
+              <box size="0.001 0.024 0.024"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision>
+      <visual>
+          <geometry>
+              <box size="0.003 0.013 0.013"/>
+          </geometry>
+          <origin xyz="0.002 0 0.003" rpy="0 0 0"/>
+          <material name="dark_gray"/>
+      </visual>
+      <collision>
+          <geometry>
+              <box size="0.003 0.013 0.013"/>
+          </geometry>
+          <origin xyz="0.002 0 0.003" rpy="0 0 0"/>
+      </collision>
+      <visual>
+          <geometry>
+              <cylinder radius="0.0065" length="0.015"/>
+          </geometry>
+          <origin xyz="0.011 0 0.003" rpy="0 1.57 0"/>
+          <material name="dark_gray"/>
+      </visual>
+      <collision>
+          <geometry>
+              <cylinder radius="0.0065" length="0.015"/>
+          </geometry>
+          <origin xyz="0.011 0 0.003" rpy="0 1.57 0"/>
+      </collision>
+      <visual>
+          <geometry>
+              <cylinder radius="0.008" length="0.005"/>
+          </geometry>
+          <origin xyz="0.021 0 0.003" rpy="0 1.57 0"/>
+          <material name="black"/>
+      </visual>
+      <collision>
+          <geometry>
+              <cylinder radius="0.008" length="0.005"/>
+          </geometry>
+          <origin xyz="0.021 0 0.003" rpy="0 1.57 0"/>
+      </collision>
+      <inertial>
+        <mass value="0.01"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/>
+      </inertial>
+  </link>
+  <link name="support_camera_link">
+      <visual>
+          <geometry>
+              <box size="0.0005 0.006 0.007"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <material name="copper_colour"/>
+      </visual>
+      <collision>
+          <geometry>
+              <box size="0.0005 0.006 0.007"/>
+          </geometry>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision>
+  </link>
+  <joint type="fixed" name="support_joint">
+    <parent link="camera_link"/>
+    <child link="support_camera_link"/>
+    <origin xyz="0 0 -0.0155" rpy="0 0 0"/>
+
+  </joint>
+
+</robot>
